@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import Home
+from .views import *
 
 urlpatterns = [
-    path('', Home)
+    path('', Home),
+    path('api/todos/get', getAllTodo),
+    path('api/todos/post', createTodo)
 ]

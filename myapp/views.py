@@ -1,6 +1,40 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from .serializers import TodolistSerializer
+from .models import Todolist
+
+# GET DATA
+
+
+@api_view(['GET'])
+def getAllTodo(request):
+    # if request.method == 'POST':
+    #     serializer = TodolistSerializer(data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    allTodolist = Todolist.objects.all()  # ดึงข้อมูล จาก Todolist
+    serializer = TodolistSerializer(allTodolist, many=True, partial=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# POST DATA
+
+
+@api_view(['POST'])
+def createTodo(request):
+    if request.method == 'POST':
+        serializer = TodolistSerializer(data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # Create your views here.
 # data = [{'message': 'Hello world'}, {'message': 'Hello world 2'}]
 data = [
